@@ -4,10 +4,10 @@ import bodyParser from 'body-parser'
 import NIA from '../index'
 
 const NIAConnector = new NIA({
-  audience: 'https://vxk.pagekite.me/',
+  audience: process.env.AUDIENCE,
   private_key: fs.readFileSync(process.env.KEY_FILE).toString(),
   certificate: fs.readFileSync(process.env.CERT_FILE).toString(),
-  assert_endpoint: 'https://vxk.pagekite.me/ExternalLogin'
+  assert_endpoint: process.env.ASSERT_ENDPOINT
 })
 
 const user = {} // global data
