@@ -1,0 +1,30 @@
+{
+  "name": "node-nia-connector",
+  "version": "1.0.0",
+  "description": "library for easy connecting to NIA - identity provider",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": {
+    "name": "Vaclav Klecanda <vencax77@gmail.com>"
+  },
+  "license": "ISC",
+  "dependencies": {
+    "async": "^3.2.0",
+    "axios": "^0.19.2",
+    "esm": "^3.2.25",
+    "underscore": "^1.9.2",
+    "urlencode": "^1.1.0",
+    "xml-crypto": "^1.4.0",
+    "xml-encryption": "^1.1.0",
+    "xmlbuilder": "^15.1.0",
+    "xmldom": "^0.3.0",
+    "xpath": "0.0.27"
+  },
+  "devDependencies": {
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1"
+  },
+  "private": "false"
+}
