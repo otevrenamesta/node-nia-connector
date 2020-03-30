@@ -21,3 +21,9 @@ const NIAConnector = new NIA({
 ```
 
 Kompletní příklad použití viz. [testovací server](test/server.js).
+
+## konfigurace
+
+Pomocí ENVVARS:
+
+- METADATA_URL: url IdP metadat. Default [testovaci NIA](https://tnia.eidentita.cz/fpsts/FederationMetadata/2007-06/FederationMetadata.xml)
