@@ -6,7 +6,7 @@ import { XMLNS } from './consts'
 export const selectXpath = xpath.useNamespaces({
   dflt: 'urn:oasis:names:tc:SAML:2.0:metadata',
   samlp: XMLNS.SAMLP,
-  ass: 'urn:oasis:names:tc:SAML:2.0:assertion',
+  saml: 'urn:oasis:names:tc:SAML:2.0:assertion',
   sig: 'http://www.w3.org/2000/09/xmldsig#',
   xenc: 'http://www.w3.org/2001/04/xmlenc#',
   claims: 'http://schemas.xmlsoap.org/ws/2009/09/identity/claims'

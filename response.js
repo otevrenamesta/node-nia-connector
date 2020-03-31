@@ -15,7 +15,7 @@ export function getStatus (dom) {
 export function decryptAssertion (dom, privateKeys) {
   const privateKey = formatPEM(privateKeys[0], 'PRIVATE KEY')
   return new Promise((resolve, reject) => {
-    const encryptedAssertion = selectXpath('//ass:EncryptedAssertion', dom, 1)
+    const encryptedAssertion = selectXpath('//saml:EncryptedAssertion', dom, 1)
     if (!encryptedAssertion) {
       return reject(new NIAError('Expected 1 EncryptedAssertion found'))
     }
@@ -93,16 +93,17 @@ const COMPLEX_ATTRS = [
 ]
 
 function parseAssertionAttributes (dom, response) {
-  response.NameID = selectXpath('string(//ass:Subject/ass:NameID)', dom, 1)
-  response.SessionIndex = selectXpath('//ass:AuthnStatement', dom, 1)
+  response.NameID = selectXpath('string(//saml:Subject/saml:NameID)', dom, 1)
+  response.SessionIndex = selectXpath('//saml:AuthnStatement', dom, 1)
     .getAttribute('SessionIndex')
+  response.LoA = selectXpath('string(//saml:AuthnContextClassRef)', dom, 1)
 
-  const vals = selectXpath('//ass:AttributeStatement//ass:Attribute', dom)
+  const vals = selectXpath('//saml:AttributeStatement//saml:Attribute', dom)
   response.user = {}
   vals.map(i => {
     const name = i.getAttribute('Name')
     const frendlyName = i.getAttribute('FriendlyName')
-    const val = selectXpath('string(ass:AttributeValue)', i)
+    const val = selectXpath('string(saml:AttributeValue)', i)
     response.user[frendlyName] = COMPLEX_ATTRS.indexOf(name) < 0
       ? val : parseComplexProfileAttr(val)
   })
