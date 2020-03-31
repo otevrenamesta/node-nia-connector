@@ -15,8 +15,8 @@ export default class NIA {
     })
   }
 
-  createAuthRequestUrl (profileAttrs) {
-    return createAuthRequest(profileAttrs, this.opts)
+  createAuthRequestUrl (loginOpts) {
+    return createAuthRequest(loginOpts, this.opts)
   }
 
   postAssert (body) {

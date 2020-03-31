@@ -4,7 +4,7 @@ import zlib from 'zlib'
 import { XMLNS, LOA } from './consts'
 import { generateReqId, signXML } from './utils'
 
-export function createAuthXML (id, profileAttrs, opts) {
+export function createAuthXML (id, loginOpts, opts) {
   const xml = xmlbuilder.create({
     'samlp:AuthnRequest': {
       '@xmlns:samlp': XMLNS.SAMLP,
@@ -17,7 +17,7 @@ export function createAuthXML (id, profileAttrs, opts) {
       'saml:Issuer': opts.audience,
       'samlp:RequestedAuthnContext': {
         '@Comparison': opts.comparison || 'minimum',
-        'saml:AuthnContextClassRef': opts.level || LOA.LOW
+        'saml:AuthnContextClassRef': loginOpts.level || LOA.LOW
       },
       'saml:Conditions': {
         'saml:AudienceRestriction': {
@@ -28,10 +28,10 @@ export function createAuthXML (id, profileAttrs, opts) {
         '@xmlns:eidas': 'http://eidas.europa.eu/saml-extensions',
         'eidas:SPType': 'public',
         'eidas:RequestedAttributes': {
-          'eidas:RequestedAttribute': profileAttrs.map(i => {
+          'eidas:RequestedAttribute': loginOpts.attrs.map(i => {
             return {
-              '@Name': i,
-              '@isRequired': true,
+              '@Name': i.name,
+              '@isRequired': i.required,
               '@NameFormat': 'urn:oasis:names:tc:SAML:2.0:attrname-format:uri'
             }
           })
@@ -42,9 +42,9 @@ export function createAuthXML (id, profileAttrs, opts) {
   return xml
 }
 
-export function createAuthRequest (profileAttrs, opts) {
+export function createAuthRequest (loginOpts, opts) {
   const id = generateReqId()
-  const xml = createAuthXML(id, profileAttrs, opts)
+  const xml = createAuthXML(id, loginOpts, opts)
   const signedXML = signXML(xml, 'AuthnRequest', opts)
   console.log(signedXML)
   return new Promise((resolve, reject) => {
