@@ -18,10 +18,16 @@ app.use(bodyParser.urlencoded({ extended: true }))
 // ------ Define express endpoints ------
 app.get('/login', function (req, res, next) {
   const attrs = [
+    NIA.PROFILEATTRS.PERSON_IDENTIFIER,
     NIA.PROFILEATTRS.GIVEN_NAME,
-    NIA.PROFILEATTRS.AGE,
+    NIA.PROFILEATTRS.FAMILY_NAME,
+    NIA.PROFILEATTRS.CURRENT_ADDRESS,
+    NIA.PROFILEATTRS.CZMORIS_TR_ADRESA_ID,
+    NIA.PROFILEATTRS.DATE_OF_BIRTH,
+    NIA.PROFILEATTRS.EMAIL,
+    NIA.PROFILEATTRS.CZMORIS_PHONE_NUMBER,
     NIA.PROFILEATTRS.CZMORIS_ID_TYPE,
-    NIA.PROFILEATTRS.EMAIL
+    NIA.PROFILEATTRS.CZMORIS_ID_NUMBER
   ]
   NIAConnector.createAuthRequestUrl(attrs).then(loginUrl => {
     res.redirect(loginUrl)

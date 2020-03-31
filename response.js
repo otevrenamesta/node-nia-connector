@@ -1,7 +1,7 @@
 import xmldom from 'xmldom'
 import xmlenc from 'xml-encryption'
 import Debug from 'debug'
-import { SUCCESS_STATUS } from './consts'
+import { SUCCESS_STATUS, PROFILEATTRS } from './consts'
 import { checkSamlSignature, selectXpath, formatPEM, NIAError } from './utils'
 
 const debug = Debug('saml2')
@@ -77,6 +77,21 @@ export function parseResponseHeader (dom, tag) {
   return responseHeader
 }
 
+function parseComplexProfileAttr (val) {
+  const decoded = Buffer.from(val, 'base64')
+  const dom = (new xmldom.DOMParser()).parseFromString(decoded.toString())
+  const subAttrs = selectXpath('//*', dom)
+  return subAttrs.reduce((obj, i) => {
+    const val = selectXpath('string(node())', i)
+    if (val) obj[i.localName] = val
+    return obj
+  }, {})
+}
+const COMPLEX_ATTRS = [
+  PROFILEATTRS.CURRENT_ADDRESS,
+  PROFILEATTRS.CZMORIS_TR_ADRESA_ID
+]
+
 function parseAssertionAttributes (dom, response) {
   response.NameID = selectXpath('string(//ass:Subject/ass:NameID)', dom, 1)
   response.SessionIndex = selectXpath('//ass:AuthnStatement', dom, 1)
@@ -85,9 +100,11 @@ function parseAssertionAttributes (dom, response) {
   const vals = selectXpath('//ass:AttributeStatement//ass:Attribute', dom)
   response.user = {}
   vals.map(i => {
-    const name = i.getAttribute('FriendlyName')
+    const name = i.getAttribute('Name')
+    const frendlyName = i.getAttribute('FriendlyName')
     const val = selectXpath('string(ass:AttributeValue)', i)
-    response.user[name] = val
+    response.user[frendlyName] = COMPLEX_ATTRS.indexOf(name) < 0
+      ? val : parseComplexProfileAttr(val)
   })
 }
 
