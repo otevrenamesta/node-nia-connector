@@ -1,6 +1,6 @@
 {
   "name": "node-nia-connector",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "library for easy connecting to NIA - identity provider",
   "main": "index.js",
   "scripts": {
