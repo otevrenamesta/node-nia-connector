@@ -10,9 +10,7 @@ export default class NIA {
   constructor (options) {
     this.opts = options
     this.opts.notbefore_skew = 1
-    loadNIAMetadata().then(metadata => {
-      Object.assign(this.opts, metadata)
-    })
+    Object.assign(this.opts, loadNIAMetadata())
   }
 
   createAuthRequestUrl (loginOpts) {
