@@ -7,10 +7,10 @@ import { loginPostAssert, logoutPostAssert } from './response'
 
 export default class NIA {
   //
-  constructor (options) {
+  constructor (options, testenv = false) {
     this.opts = options
     this.opts.notbefore_skew = 1
-    Object.assign(this.opts, loadNIAMetadata())
+    Object.assign(this.opts, loadNIAMetadata(Boolean(testenv)))
   }
 
   createAuthRequestUrl (loginOpts) {
