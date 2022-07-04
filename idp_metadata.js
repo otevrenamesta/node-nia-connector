@@ -4,9 +4,9 @@ import { BINDING } from './consts'
 import { selectXpath } from './utils'
 
 const METADATA_TEST_URL = process.env.METADATA_TEST_URL ||
-  'https://tnia.eidentita.cz/fpsts/FederationMetadata/2007-06/FederationMetadata.xml'
+  'https://tnia.identitaobcana.cz/fpsts/FederationMetadata/2007-06/FederationMetadata.xml'
 const METADATA_PRODUCTION_URL = process.env.METADATA_PRODUCTION_URL ||
-  'https://nia.eidentita.cz/fpsts/FederationMetadata/2007-06/FederationMetadata.xml'
+  'https://nia.identitaobcana.cz/fpsts/FederationMetadata/2007-06/FederationMetadata.xml'
 
 function _parseMetadata (res) {
   const doc = (new xmldom.DOMParser()).parseFromString(res.data)
