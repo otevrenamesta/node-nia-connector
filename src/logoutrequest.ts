@@ -1,10 +1,16 @@
 import urlencode from 'urlencode'
 import xmlbuilder from 'xmlbuilder'
 import zlib from 'zlib'
-import { XMLNS } from './consts'
-import { generateReqId, signXML } from './utils'
+import { XMLNS } from './consts.js'
+import { generateReqId, signXML } from './utils.js'
 
-export function createLogoutRequestUrl (nameId, sessionIndex, opts) {
+interface LogoutOpts {
+  sso_logout_url: string;
+  audience: string;
+  private_key: string;
+}
+
+export function createLogoutRequestUrl (nameId: string, sessionIndex: string, opts: LogoutOpts): Promise<string> {
   const id = generateReqId()
   const xml = createLogoutRequestXML(id, nameId, sessionIndex, opts)
   const signedXML = signXML(xml, 'LogoutRequest', opts)
@@ -18,7 +24,7 @@ export function createLogoutRequestUrl (nameId, sessionIndex, opts) {
   })
 }
 
-export function createLogoutRequestXML (id, nameId, sessionIndex, opts) {
+export function createLogoutRequestXML (id: string, nameId: string, sessionIndex: string, opts: LogoutOpts): string {
   const xml = xmlbuilder.create({
     'samlp:LogoutRequest': {
       '@xmlns:samlp': XMLNS.SAMLP,

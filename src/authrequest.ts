@@ -1,10 +1,28 @@
 import urlencode from 'urlencode'
 import xmlbuilder from 'xmlbuilder'
 import zlib from 'zlib'
-import { XMLNS, LOA } from './consts'
-import { generateReqId, signXML } from './utils'
+import { XMLNS, LOA } from './consts.js'
+import { generateReqId, signXML } from './utils.js'
 
-export function createAuthXML (id, loginOpts, opts) {
+interface LoginAttr {
+  name: string;
+  required: boolean;
+}
+
+interface LoginOpts {
+  level?: string;
+  attrs: LoginAttr[];
+}
+
+interface NIAOpts {
+  sso_login_url: string;
+  assert_endpoint: string;
+  audience: string;
+  comparison?: string;
+  private_key: string;
+}
+
+export function createAuthXML (id: string, loginOpts: LoginOpts, opts: NIAOpts): string {
   const xml = xmlbuilder.create({
     'samlp:AuthnRequest': {
       '@xmlns:samlp': XMLNS.SAMLP,
@@ -42,11 +60,10 @@ export function createAuthXML (id, loginOpts, opts) {
   return xml
 }
 
-export function createAuthRequest (loginOpts, opts) {
+export function createAuthRequest (loginOpts: LoginOpts, opts: NIAOpts): Promise<string> {
   const id = generateReqId()
   const xml = createAuthXML(id, loginOpts, opts)
   const signedXML = signXML(xml, 'AuthnRequest', opts)
-  console.log(signedXML)
   return new Promise((resolve, reject) => {
     zlib.deflateRaw(signedXML, (err, deflated) => {
       if (err) return reject(err)

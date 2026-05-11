@@ -2,20 +2,20 @@
   "name": "node-nia-connector",
   "version": "1.0.2",
   "description": "library for easy connecting to NIA - identity provider",
-  "main": "index.js",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
-    "start": "node --inspect -r esm test/server.js",
+    "build": "tsc",
+    "start": "npm run build && node dist/test/server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": {
     "name": "Vaclav Klecanda <vencax77@gmail.com>"
   },
   "license": "ISC",
+  "type": "module",
   "dependencies": {
-    "async": "^3.2.0",
     "axios": "^0.19.2",
-    "esm": "^3.2.25",
-    "underscore": "^1.9.2",
     "urlencode": "^1.1.0",
     "xml-crypto": "^1.4.0",
     "xml-encryption": "^1.1.0",
@@ -24,7 +24,16 @@
     "xpath": "0.0.27"
   },
   "devDependencies": {
+    "@types/body-parser": "^1.19.6",
+    "@types/debug": "^4.1.13",
+    "@types/express": "^5.0.6",
+    "@types/node": "^25.6.2",
+    "@types/urlencode": "^1.1.4",
+    "@types/xml-crypto": "^1.4.6",
+    "@types/xml-encryption": "^1.2.4",
+    "@types/xmldom": "^0.1.34",
     "body-parser": "^1.19.0",
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "typescript": "^6.0.3"
   }
 }
