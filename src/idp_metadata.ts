@@ -1,5 +1,3 @@
-import _axios from 'axios'
-const axios = _axios as any
 import { DOMParser } from '@xmldom/xmldom'
 import { BINDING } from './consts.js'
 import { selectXpath } from './utils.js'
@@ -15,13 +13,13 @@ interface NIAMetadata {
   certificates: string[];
 }
 
-function _parseMetadata (res: { data: string }): NIAMetadata {
-  const doc = (new DOMParser()).parseFromString(res.data)
+function _parseMetadata(data: string): NIAMetadata {
+  const doc = (new DOMParser()).parseFromString(data)
   const loginURLXpath = `//dflt:IDPSSODescriptor//dflt:SingleSignOnService[@Binding="${BINDING.REDIRECT}"]`
   const cert = selectXpath('string(//dflt:IDPSSODescriptor//sig:X509Certificate)', doc) as unknown as string
   const login = selectXpath(loginURLXpath, doc, true) as any
   const logout = selectXpath('//dflt:IDPSSODescriptor//dflt:SingleLogoutService', doc, true) as any
-  
+
   const loginAttr = Array.isArray(login) ? login[0] : login
   const logoutAttr = Array.isArray(logout) ? logout[0] : logout
 
@@ -36,9 +34,9 @@ const metadata: Record<string, NIAMetadata> = {}
 
 async function _load() {
   try {
-    const res_test = await axios.get(METADATA_TEST_URL)
+    const res_test: string = await (await fetch(METADATA_TEST_URL)).text()
     metadata['true'] = _parseMetadata(res_test)
-    const res = await axios.get(METADATA_PRODUCTION_URL)
+    const res = await (await fetch(METADATA_PRODUCTION_URL)).text()
     metadata['false'] = _parseMetadata(res)
   } catch (e) {
     console.error('Failed to load NIA metadata', e)
@@ -46,6 +44,6 @@ async function _load() {
 }
 _load()
 
-export function loadNIAMetadata (i_want_test: boolean): NIAMetadata {
+export function loadNIAMetadata(i_want_test: boolean): NIAMetadata {
   return metadata[String(i_want_test)]
 }
